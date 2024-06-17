@@ -1,18 +1,11 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 
-/**
- *
- * @author Adm
- */
 
 import java.sql.PreparedStatement;
 import java.sql.Connection;
 import javax.swing.JOptionPane;
 import java.sql.ResultSet;
 import java.util.ArrayList;
+import java.sql.SQLException;
 
 
 public class ProdutosDAO {
@@ -23,9 +16,20 @@ public class ProdutosDAO {
     ArrayList<ProdutosDTO> listagem = new ArrayList<>();
     
     public void cadastrarProduto (ProdutosDTO produto){
-        
-        
-        //conn = new conectaDAO().connectDB();
+        conectaDAO conectar = new conectaDAO();
+        conn = conectar.connectDB();
+        try {
+            PreparedStatement pst = conn.prepareStatement("insert into produtos (nome, valor, status) values (?,?,?)");
+            pst.setString(1, produto.getNome());
+            pst.setInt(2, produto.getValor());
+            pst.setString(3, produto.getStatus());
+            pst.execute();
+            JOptionPane.showMessageDialog(null, "Produto Salvo com sucesso!");
+            
+        }
+        catch(SQLException e) {
+            JOptionPane.showMessageDialog(null, e.getMessage());
+        }
         
         
     }
