@@ -35,6 +35,22 @@ public class ProdutosDAO {
         
     }
     
+    public void venderProduto(int id) {
+        conectaDAO conectar = new conectaDAO();
+        conn = conectar.connectDB();
+        try {
+            PreparedStatement pst = conn.prepareStatement("update produtos set status = 'Vendido' where id = ?");
+            pst.setInt(1, id);
+            int atualizado = pst.executeUpdate();
+            if(atualizado > 0) {
+                JOptionPane.showMessageDialog(null, "produto vendido");
+            }
+        }
+        catch(SQLException e) {
+            JOptionPane.showMessageDialog(null, e.getMessage());
+        }
+    }
+    
     public ArrayList<ProdutosDTO> listarProdutos(){
         conectaDAO conectar = new conectaDAO();
         conn = conectar.connectDB();
