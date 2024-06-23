@@ -73,6 +73,31 @@ public class ProdutosDAO {
         }
     }
     
+    public ArrayList<ProdutosDTO> listarProdutosVendidos(){
+        conectaDAO conectar = new conectaDAO();
+        conn = conectar.connectDB();
+        ArrayList<ProdutosDTO> listar = new ArrayList<>();
+        try {
+           PreparedStatement pst = conn.prepareStatement("select * from produtos where status = ?");
+           pst.setString(1, "Vendido");
+           ResultSet rs = pst.executeQuery();
+           while(rs.next()) {
+               ProdutosDTO produto = new ProdutosDTO();
+               produto.setId(rs.getInt("id"));
+               produto.setNome(rs.getString("nome"));
+               produto.setValor(rs.getInt("valor"));
+               produto.setStatus(rs.getString("status"));
+               listar.add(produto);
+           }
+           return listar;
+        }
+        catch(SQLException e) {
+            return null;
+        }
+    }
+    
+    
+    
     
     
         
