@@ -35,6 +35,22 @@ public class ProdutosDAO {
         
     }
     
+    public void venderProduto(int id) {
+        conectaDAO conectar = new conectaDAO();
+        conn = conectar.connectDB();
+        try {
+            PreparedStatement pst = conn.prepareStatement("update produtos set status = 'Vendido' where id = ?");
+            pst.setInt(1, id);
+            int atualizado = pst.executeUpdate();
+            if(atualizado > 0) {
+                JOptionPane.showMessageDialog(null, "produto vendido");
+            }
+        }
+        catch(SQLException e) {
+            JOptionPane.showMessageDialog(null, e.getMessage());
+        }
+    }
+    
     public ArrayList<ProdutosDTO> listarProdutos(){
         conectaDAO conectar = new conectaDAO();
         conn = conectar.connectDB();
@@ -56,6 +72,31 @@ public class ProdutosDAO {
             return null;
         }
     }
+    
+    public ArrayList<ProdutosDTO> listarProdutosVendidos(){
+        conectaDAO conectar = new conectaDAO();
+        conn = conectar.connectDB();
+        ArrayList<ProdutosDTO> listar = new ArrayList<>();
+        try {
+           PreparedStatement pst = conn.prepareStatement("select * from produtos where status = ?");
+           pst.setString(1, "Vendido");
+           ResultSet rs = pst.executeQuery();
+           while(rs.next()) {
+               ProdutosDTO produto = new ProdutosDTO();
+               produto.setId(rs.getInt("id"));
+               produto.setNome(rs.getString("nome"));
+               produto.setValor(rs.getInt("valor"));
+               produto.setStatus(rs.getString("status"));
+               listar.add(produto);
+           }
+           return listar;
+        }
+        catch(SQLException e) {
+            return null;
+        }
+    }
+    
+    
     
     
     
